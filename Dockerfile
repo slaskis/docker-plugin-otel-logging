@@ -1,0 +1,21 @@
+
+FROM golang:1.23-alpine AS builder
+
+WORKDIR /plugin
+COPY . .
+
+RUN go mod download
+RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o docker-otel-logging-plugin .
+
+FROM scratch
+
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
+COPY --from=builder /tmp /tmp
+COPY --from=builder /run /run
+
+# Copy only the binary
+COPY --from=builder /plugin/docker-otel-logging-plugin /usr/bin/
+
+# Set the entrypoint
+ENTRYPOINT ["/usr/bin/docker-otel-logging-plugin"]

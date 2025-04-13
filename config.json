@@ -1,0 +1,20 @@
+{
+  "Description": "OpenTelemetry logging plugin for Docker",
+  "Documentation": "https://github.com/middle-management/docker-otel-logging-plugin",
+  "Entrypoint": ["/usr/bin/docker-otel-logging-plugin"],
+  "Interface": {
+    "Types": ["docker.logdriver/1.0"],
+    "Socket": "otel.sock"
+  },
+  "Network": {
+    "Type": "host"
+  },
+  "Env": [
+    {
+      "Name": "LOG_LEVEL",
+      "Description": "Set log level",
+      "Value": "info"
+    }
+  ],
+  "propagatedMount": "/run/docker/plugins"
+}
