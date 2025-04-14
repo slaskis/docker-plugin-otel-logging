@@ -6,7 +6,7 @@ WORKDIR /plugin
 COPY go.* .
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o docker-otel-logging-plugin .
+RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o docker-plugin-otel-logging .
 
 FROM scratch
 
@@ -16,7 +16,7 @@ COPY --from=builder /tmp /tmp
 COPY --from=builder /run /run
 
 # Copy only the binary
-COPY --from=builder /plugin/docker-otel-logging-plugin /usr/bin/
+COPY --from=builder /plugin/docker-plugin-otel-logging /usr/bin/
 
 # Set the entrypoint
-ENTRYPOINT ["/usr/bin/docker-otel-logging-plugin"]
+ENTRYPOINT ["/usr/bin/docker-plugin-otel-logging"]

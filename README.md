@@ -4,6 +4,14 @@ This Docker logging plugin captures container logs and forwards them to an OpenT
 
 ## Installation
 
+Install from docker hub:
+
+```bash
+docker plugin install slaskis/otel-logging
+```
+
+## Development
+
 Build and install the plugin:
 
 ```bash

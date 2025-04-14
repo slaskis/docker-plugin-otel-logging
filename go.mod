@@ -1,4 +1,4 @@
-module github.com/middle-management/docker-otel-logging-plugin
+module github.com/middle-management/docker-plugin-otel-logging
 
 go 1.23.0
 

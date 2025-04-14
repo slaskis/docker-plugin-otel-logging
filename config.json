@@ -1,7 +1,7 @@
 {
   "Description": "OpenTelemetry logging plugin for Docker",
-  "Documentation": "https://github.com/middle-management/docker-otel-logging-plugin",
-  "Entrypoint": ["/usr/bin/docker-otel-logging-plugin"],
+  "Documentation": "https://github.com/slaskis/docker-plugin-otel-logging",
+  "Entrypoint": ["/usr/bin/docker-plugin-otel-logging"],
   "Interface": {
     "Types": ["docker.logdriver/1.0"],
     "Socket": "otel.sock"
