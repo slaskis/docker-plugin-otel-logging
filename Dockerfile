@@ -2,9 +2,10 @@
 FROM golang:1.23-alpine AS builder
 
 WORKDIR /plugin
-COPY . .
 
+COPY go.* .
 RUN go mod download
+COPY . .
 RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o docker-otel-logging-plugin .
 
 FROM scratch

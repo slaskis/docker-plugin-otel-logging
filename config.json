@@ -9,12 +9,6 @@
   "Network": {
     "Type": "host"
   },
-  "Env": [
-    {
-      "Name": "LOG_LEVEL",
-      "Description": "Set log level",
-      "Value": "info"
-    }
-  ],
+  "Env": [],
   "propagatedMount": "/run/docker/plugins"
 }

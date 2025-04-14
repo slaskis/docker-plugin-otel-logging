@@ -1,4 +1,5 @@
 build:
+	@echo "Building rootfs for the Docker plugin..."
 	# Build the plugin binary and Docker image
 	docker build -t otel-logger-plugin .
 
@@ -15,9 +16,10 @@ build:
 	# Clean up the temporary container
 	docker rm -f tmp-otel-plugin
 
-	echo "Creating the Docker plugin..."
-	docker plugin rm -f otel-logger || true
-	docker plugin create otel-logger .
-	docker plugin enable otel-logger
+	@echo "Creating the Docker plugin..."
+	docker plugin rm -f slaskis/otel-logging || true
+	docker plugin create slaskis/otel-logging .
+	docker plugin enable slaskis/otel-logging
 
-	echo "Plugin created and enabled successfully!"
+push:
+	docker plugin push slaskis/otel-logging

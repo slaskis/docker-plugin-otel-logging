@@ -1,0 +1,44 @@
+services:
+  # Simple application to generate logs
+  test-app:
+    image: alpine:latest
+    init: true
+    command: |
+      sh -c "while true; do
+        echo 'Regular log message'
+        echo '{\"level\":\"info\",\"message\":\"JSON log message\",\"service\":\"test-app\"}'
+        sleep 5
+      done"
+    logging:
+      driver: "slaskis/otel-logger"
+      options:
+        otel-endpoint: "localhost:4318"
+        service-name: "test-app"
+        insecure: "true"
+    depends_on:
+      - collector
+
+  collector:
+    image: grafana/otel-lgtm
+    init: true
+    ports:
+      - 3000:3000
+      - 4317:4317
+      - 4318:4318
+    environment:
+      ENABLE_LOGS_OTELCOL: true
+      ENABLE_LOGS_LOKI: true
+      OTEL_LOG_LEVEL: verbose
+
+  network-test:
+    image: alpine:latest
+    init: true
+    command: >
+      sh -c "apk add --no-cache curl && while true; do
+        echo 'Testing connection to collector...'
+        curl -v http://collector:4318/v1/logs -H 'Content-Type: application/json' -d '{\"resourceLogs\":[{\"resource\":{\"attributes\":[{\"key\":\"service.name\",\"value\":{\"stringValue\":\"test\"}}]},\"scopeLogs\":[{\"scope\":{},\"logRecords\":[{\"timeUnixNano\":\"'$(date +%s)000000000'\",\"body\":{\"stringValue\":\"Test log\"},\"severityNumber\":9,\"severityText\":\"INFO\"}]}]}]}'
+        echo 'Sleeping for 10 seconds...'
+        sleep 10
+      done"
+    depends_on:
+      - collector
